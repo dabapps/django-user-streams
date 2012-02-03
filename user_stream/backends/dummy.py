@@ -15,7 +15,7 @@ class MemoryStorage(object):
         stream_item = DummyStreamItem(content, created_at)
         for user in users:
             if user in self.streams:
-                self.streams[user].append(stream_item)
+                self.streams[user].insert(0, stream_item)
             else:
                 self.streams[user] = [stream_item]
 

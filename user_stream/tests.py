@@ -45,7 +45,7 @@ class StreamStorageTestMixin(object):
     """
 
     def test_single_user(self):
-        user = User.objects.create(username='test1')
+        user = User.objects.create()
         content = 'Test message'
 
         add_stream_item(user, content)
@@ -56,15 +56,28 @@ class StreamStorageTestMixin(object):
         self.assertEqual(item.content, content)
 
     def test_multiple_users(self):
-        user_1 = User.objects.create(username='test2')
-        user_2 = User.objects.create(username='test3')
-        user_3 = User.objects.create(username='test4')
+        user_1 = User.objects.create(username='test1')
+        user_2 = User.objects.create(username='test2')
+        user_3 = User.objects.create(username='test3')
         content = 'Broadcast message'
 
         add_stream_item(User.objects.all(), content)
 
         for user in user_1, user_2, user_3:
             self.assertEqual(get_stream_items(user)[0].content, content)
+
+    def test_message_ordering(self):
+        user = User.objects.create()
+
+        add_stream_item(user, 'Message 1')
+        add_stream_item(user, 'Message 2')
+        add_stream_item(user, 'Message 3')
+
+        stream_items = get_stream_items(user)
+
+        self.assertEqual(stream_items[0].content, 'Message 3')
+        self.assertEqual(stream_items[1].content, 'Message 2')
+        self.assertEqual(stream_items[2].content, 'Message 1')
 
 
 class DummyBackendStreamTestCase(TestCase, StreamStorageTestMixin):
