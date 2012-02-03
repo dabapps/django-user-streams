@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     ...
 ]
 
-USER_STREAM_BACKEND = 'user_streams.backends.single_table.SingleTableDatabaseBackend'
+USER_STREAMS_BACKEND = 'user_streams.backends.single_table.SingleTableDatabaseBackend'
 ```
 
 Finally, if you're using a backend that stores stream items using Django's model

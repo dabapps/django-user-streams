@@ -3,7 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
 
 
-BACKEND_SETTING_NAME = 'USER_STREAM_BACKEND'
+BACKEND_SETTING_NAME = 'USER_STREAMS_BACKEND'
 
 
 def get_backend():
