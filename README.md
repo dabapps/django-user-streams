@@ -1,4 +1,4 @@
-# django-user-stream
+# django-user-streams
 
 **Simple, fast user news feeds for Django**
 
