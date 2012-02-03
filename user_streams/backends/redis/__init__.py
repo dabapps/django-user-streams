@@ -5,6 +5,7 @@ except ImportError:
 
 
 from datetime import datetime
+from django.utils.encoding import smart_str, smart_unicode
 import time
 from uuid import uuid4
 
@@ -31,11 +32,11 @@ def add_header(content):
     We need to add a unique header to each message, as duplicate items
     will otherwise be overwritten
     """
-    return uuid4().hex + content
+    return uuid4().hex + smart_str(content)
 
 
 def remove_header(content):
-    return content[32:]
+    return smart_unicode(content[32:])
 
 
 class RedisBackend(object):

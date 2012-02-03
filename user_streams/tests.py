@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
@@ -92,6 +95,16 @@ class StreamStorageTestMixin(object):
 
         items = get_stream_items(user)
         self.assertEqual(len(items), 2)
+
+    def test_unicode_handled_properly(self):
+        user = User.objects.create()
+        message = u'☃'
+
+        add_stream_item(user, message)
+
+        items = get_stream_items(user)
+        self.assertEqual(items[0].content, message)
+
 
 
 @override_settings(**DUMMY_BACKEND_SETTINGS)
