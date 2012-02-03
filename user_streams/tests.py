@@ -80,11 +80,9 @@ class StreamStorageTestMixin(object):
         self.assertEqual(stream_items[2].content, 'Message 1')
 
 
+@override_settings(**DUMMY_BACKEND_SETTINGS)
 class DummyBackendStreamTestCase(TestCase, StreamStorageTestMixin):
 
     def setUp(self):
         dummy_backend = get_backend()
         dummy_backend.flush()
-
-
-DummyBackendStreamTestCase = override_settings(**DUMMY_BACKEND_SETTINGS)(DummyBackendStreamTestCase)
