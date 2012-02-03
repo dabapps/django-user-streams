@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 
@@ -68,10 +69,11 @@ class StreamStorageTestMixin(object):
 
     def test_message_ordering(self):
         user = User.objects.create()
+        now = datetime.now()
 
-        add_stream_item(user, 'Message 1')
-        add_stream_item(user, 'Message 2')
-        add_stream_item(user, 'Message 3')
+        add_stream_item(user, 'Message 1', created_at=now)
+        add_stream_item(user, 'Message 2', created_at=now + timedelta(minutes=1))
+        add_stream_item(user, 'Message 3', created_at=now + timedelta(minutes=2))
 
         stream_items = get_stream_items(user)
 

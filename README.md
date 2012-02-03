@@ -67,6 +67,49 @@ import user_streams
 user_streams.add_stream_item(User.objects.all(), 'Broadcast message to all users')
 ```
 
+You can also specify the creation time for the stream item by passing a
+`datetime.datetime` instance as the value of the `created_at` argument.
+
+```python
+import user_streams
+from datetime import datetime
+
+user = User.objects.get(username='jamie')
+user_streams.add_stream_item(user, 'You have a new message!', created_at=datetime.now())
+```
+
+#### A note on time zones
+
+By default, if you don't pass a `created_at` argument to `add_stream_item`, the
+value of `datetime.datetime.now()` will be used to timestamp your stream items.
+This is probably the least surprising behaviour, and if your app only ever deals
+with users in one timezone (and those users are in the same timezone as your
+web server), it's probably fine.
+
+If your users are all over the world, however, this is a bad idea. The reasons
+for this are discussed in
+[this blog post by Armin Ronacher](http://lucumr.pocoo.org/2011/7/15/eppur-si-muove/).
+The best way to store timestamps in the database is to use the UTC timezone.
+You can then convert them to your users' local time at the last possible moment
+(when the `datetime` object is formatted for presentation to the user).
+
+To support this, you can either provide the `created_at` argument every time
+you call the `add_stream_item` method:
+
+```python
+user_streams.add_stream_item(user, 'You have a new message!', created_at=datetime.utcnow())
+```
+
+Alternatively, you can set the `USER_STREAMS_USE_UTC` setting (in your
+`settings.py`) to `True` (it's `False` by default). If you do this,
+`datetime.utcnow()` will be used instead of `datetime.now()` to generate
+the timestamps for each stream item.
+
+If you do either of these things, the `created_at` property of each of your
+stream items will be set to UTC time. It's your responsibility to convert
+this to each user's local time for formatting. Take a look at
+[times](https://github.com/nvie/times) for an easy way to deal with that.
+
 ### Getting the stream for a user
 
 To retrieve the stream items for a user:

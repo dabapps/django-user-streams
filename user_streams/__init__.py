@@ -4,6 +4,7 @@ from django.utils.importlib import import_module
 
 
 BACKEND_SETTING_NAME = 'USER_STREAMS_BACKEND'
+USE_UTC_SETTING_NAME = 'USER_STREAMS_USE_UTC'
 
 
 def get_backend():
@@ -48,18 +49,22 @@ def create_iterable(item_or_iterable):
 def now():
     """
     Return a datetime object representing the current time
-    #TODO timezones?
     """
-    return datetime.now()
+    from django.conf import settings
+    use_utc = getattr(settings, USE_UTC_SETTING_NAME, False)
+    if use_utc:
+        return datetime.utcnow()
+    else:
+        return datetime.now()
 
 
-def add_stream_item(user_or_users, content):
+def add_stream_item(user_or_users, content, created_at=None):
     """
     Add a single message to the stream of one or more users.
     """
     backend = get_backend()
     users = create_iterable(user_or_users)
-    created_at = now()
+    created_at = created_at or now()
     backend.add_stream_item(users, content, created_at)
 
 
