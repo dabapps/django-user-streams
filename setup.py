@@ -24,6 +24,6 @@ setup(
     description='Simple, fast user news feeds for Django',
     author='Jamie Matthews',
     url='https://github.com/dabapps/django-user-streams',
-    packages=find_packages(),
+    packages=find_packages(exclude=['testproject']),
     license='BSD',
 )
