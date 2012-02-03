@@ -7,6 +7,9 @@ BACKEND_SETTING_NAME = 'USER_STREAM_BACKEND'
 
 
 def get_backend():
+    """
+    Return the stream storage backend configured in the settings
+    """
     from django.conf import settings
     backend_path = getattr(settings, BACKEND_SETTING_NAME, None)
     if not backend_path:
