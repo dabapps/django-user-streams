@@ -131,15 +131,15 @@ returned will be *lazy*, meaning that you can slice it (and pass it to a Django
 
 ### Backends
 
-Stream storage is abstracted into `Backend` classes. Three are shipped with
-`django-user-streams`, Each backend is kept in a separate reusable app, which
-must be added to `INSTALLED_APPS` separately to the main `user_streams` app. This
-is to ensure that only the database tables required for each backend are created
-(assuming you are using a backend that stores data through Django's model
- layer).
+Stream storage is abstracted into `Backend` classes. Three backends are
+included with `django-user-streams`. Each backend is kept in a separate
+reusable app, which must be added to `INSTALLED_APPS` separately to the main
+`user_streams` app. This is to ensure that only the database tables required
+for each backend are created (assuming you are using a backend that stores
+data through Django's model layer).
 
 Which backend you choose depends on the scale of your application, as well as
-your expected usage patterns.
+your expected usage patterns. The pros and cons of each are described below.
 
 #### SingleTableDatabaseBackend
 
