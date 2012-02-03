@@ -6,5 +6,7 @@ DATABASES = {
 }
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
     'user_stream',
 ]
