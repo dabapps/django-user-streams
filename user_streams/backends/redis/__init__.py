@@ -10,9 +10,13 @@ import time
 
 KEY_PREFIX_SETTING_NAME = 'USER_STREAMS_REDIS_KEY_PREFIX'
 DEFAULT_KEY_PREFIX = 'user_streams'
+CLIENT_ARGUMENTS_SETTING_NAME = 'USER_STREAMS_REDIS_CLIENT_ARGUMENTS'
 
 
-redis_client = Redis() # TODO support overriding arguments
+def get_redis_client():
+    from django.conf import settings
+    client_arguments = getattr(settings, CLIENT_ARGUMENTS_SETTING_NAME, {})
+    return Redis(**client_arguments)
 
 
 def create_key(key):
@@ -23,11 +27,14 @@ def create_key(key):
 
 class RedisBackend(object):
 
+    def __init__(self):
+        self.redis_client = get_redis_client()
+
     def add_stream_item(self, users, content, created_at):
         for user in users:
             key = create_key('user:%s' % user.pk)
             timestamp = time.mktime(created_at.timetuple())
-            redis_client.zadd(key, content, timestamp)
+            self.redis_client.zadd(key, content, timestamp)
 
     def get_stream_items(self, user):
         return LazyResultSet(user)
@@ -37,9 +44,10 @@ class LazyResultSet(object):
 
     def __init__(self, user):
         self.key = create_key('user:%s' % user.pk)
+        self.redis_client = get_redis_client()
 
     def __len__(self):
-        return redis_client.zcard(self.key)
+        return self.redis_client.zcard(self.key)
 
     def __getitem__(self, item):
         if isinstance(item, slice):
@@ -49,7 +57,7 @@ class LazyResultSet(object):
             start = item
             stop = item
 
-        result = redis_client.zrange(self.key, start, stop, desc=True, withscores=True)
+        result = self.redis_client.zrange(self.key, start, stop, desc=True, withscores=True)
         for content, timestamp in result:
             created_at = datetime.fromtimestamp(timestamp)
             return StreamItem(content, created_at)
