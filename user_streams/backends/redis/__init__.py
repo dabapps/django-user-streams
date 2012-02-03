@@ -65,18 +65,27 @@ class LazyResultSet(object):
         return self.redis_client.zcard(self.key)
 
     def __getitem__(self, item):
-        if isinstance(item, slice):
+        multi = isinstance(item, slice)
+
+        if multi:
             start = item.start or 0
-            stop = item.stop or -1
+            stop = item.stop - 1
         else:
             start = item
             stop = item
 
         result = self.redis_client.zrange(self.key, start, stop, desc=True, withscores=True)
+
+        stream_items = []
         for content, timestamp in result:
             created_at = datetime.fromtimestamp(timestamp)
             content = remove_header(content)
-            return StreamItem(content, created_at)
+            stream_items.append(StreamItem(content, created_at))
+
+        if multi:
+            return stream_items
+        else:
+            return stream_items[0]
 
 
 class StreamItem(object):

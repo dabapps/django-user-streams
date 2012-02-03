@@ -84,6 +84,26 @@ class StreamStorageTestMixin(object):
         self.assertEqual(stream_items[1].content, 'Message 2')
         self.assertEqual(stream_items[2].content, 'Message 1')
 
+    def test_slicing(self):
+        user = User.objects.create()
+        now = datetime.now()
+
+        for count in range(10):
+            created_at = now + timedelta(minutes=count)
+            add_stream_item(user, 'Message %s' % count, created_at=created_at)
+
+        stream_items = get_stream_items(user)
+
+        first_five = stream_items[0:5]
+        self.assertEqual(len(first_five), 5)
+        self.assertEqual(first_five[0].content, 'Message 9')
+        self.assertEqual(first_five[4].content, 'Message 5')
+
+        middle = stream_items[3:7]
+        self.assertEqual(len(middle), 4)
+        self.assertEqual(middle[0].content, 'Message 6')
+        self.assertEqual(middle[3].content, 'Message 3')
+
     def test_identical_messages(self):
         """Check that identical messages are handled properly. Mostly
         an issue for the Redis backend (which uses sets to store messages)"""
