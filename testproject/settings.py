@@ -8,7 +8,7 @@ DATABASES = {
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.auth',
-    'user_stream',
-    'user_stream.backends.single_table',
-    'user_stream.backends.many_to_many',
+    'user_streams',
+    'user_streams.backends.single_table',
+    'user_streams.backends.many_to_many',
 ]

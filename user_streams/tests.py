@@ -2,12 +2,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 
 
-from user_stream import BACKEND_SETTING_NAME, get_backend, add_stream_item, get_stream_items
-from user_stream.backends.dummy import DummyBackend
-from user_stream.utils import TestCase, override_settings
+from user_streams import BACKEND_SETTING_NAME, get_backend, add_stream_item, get_stream_items
+from user_streams.backends.dummy import DummyBackend
+from user_streams.utils import TestCase, override_settings
 
 
-DUMMY_BACKEND_SETTINGS = {BACKEND_SETTING_NAME: 'user_stream.backends.dummy.DummyBackend'}
+DUMMY_BACKEND_SETTINGS = {BACKEND_SETTING_NAME: 'user_streams.backends.dummy.DummyBackend'}
 
 
 class GetBackendTestCase(TestCase):

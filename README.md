@@ -27,18 +27,18 @@ You can install django-user-stream from PyPI:
 
     pip install django-user-stream
 
-Add `user_stream` to your `INSTALLED_APPS` setting. You also need a *backend*,
+Add `user_streams` to your `INSTALLED_APPS` setting. You also need a *backend*,
 which defines how your streams are stored. These are described below.
 
 ```python
 INSTALLED_APPS = [
     ...
-    'user_stream',
-    'user_stream.backends.single_table',
+    'user_streams',
+    'user_streams.backends.single_table',
     ...
 ]
 
-USER_STREAM_BACKEND = 'user_stream.backends.single_table.SingleTableDatabaseBackend'
+USER_STREAM_BACKEND = 'user_streams.backends.single_table.SingleTableDatabaseBackend'
 ```
 
 Finally, if you're using a backend that stores stream items using Django's model
@@ -51,10 +51,10 @@ layer, run `manage.py syncdb` to create the necessary database tables.
 To create a stream item:
 
 ```python
-import user_stream
+import user_streams
 
 user = User.objects.get(username='jamie')
-user_stream.add_stream_item(user, 'This is the contents of the stream item')
+user_streams.add_stream_item(user, 'This is the contents of the stream item')
 ```
 
 The first argument to `add_stream_item` can be a single `User` instance, or a queryset
@@ -62,9 +62,9 @@ representing multiple users. In the latter case, the message you supply is added
 to the stream of each user in the queryset.
 
 ```python
-import user_stream
+import user_streams
 
-user_stream.add_stream_item(User.objects.all(), 'Broadcast message to all users')
+user_streams.add_stream_item(User.objects.all(), 'Broadcast message to all users')
 ```
 
 ### Getting the stream for a user
@@ -72,10 +72,10 @@ user_stream.add_stream_item(User.objects.all(), 'Broadcast message to all users'
 To retrieve the stream items for a user:
 
 ```python
-import user_stream
+import user_streams
 
 user = User.objects.get(username='jamie')
-items = user_stream.get_stream_items(user)
+items = user_streams.get_stream_items(user)
 ```
 
 This will return an iterable of objects, each of which is guaranteed to have two
@@ -90,7 +90,7 @@ returned will be *lazy*, meaning that you can slice it (and pass it to a Django
 
 Stream storage is abstracted into `Backend` classes. Three are shipped with
 `django-user-streams`, Each backend is kept in a separate reusable app, which
-must be added to `INSTALLED_APPS` separately to the main `user_stream` app. This
+must be added to `INSTALLED_APPS` separately to the main `user_streams` app. This
 is to ensure that only the database tables required for each backend are created
 (assuming you are using a backend that stores data through Django's model
  layer).
@@ -100,7 +100,7 @@ your expected usage patterns.
 
 #### SingleTableDatabaseBackend
 
-`user_stream.backends.single_table.SingleTableDatabaseBackend`
+`user_streams.backends.single_table.SingleTableDatabaseBackend`
 
 The simplest backend. Your stream items are stored in a single database table,
 consisting of a foreign key to a `User` object, a `DateTimeField` timestamp, and
@@ -112,7 +112,7 @@ users, you may find that the table gets very large.
 
 #### ManyToManyDatabaseBackend
 
-`user_stream.backends.many_to_many.ManyToManyDatabaseBackend`
+`user_streams.backends.many_to_many.ManyToManyDatabaseBackend`
 
 This backend stores your messages in a table with a `ManyToManyField`
 relationship to your `User` objects. Each message is only stored *once*, with a
@@ -121,7 +121,7 @@ space for broadcast messages, but your queries may be slightly slower.
 
 #### RedisBackend
 
-`user_stream.backends.redis.RedisBackend`
+`user_streams.backends.redis.RedisBackend`
 
 Stores your messages in Redis sorted sets, one set for each user,  with a Unix
 timestamp (the `created_at` attribute) as the score for each item. This approach
