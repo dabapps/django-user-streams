@@ -11,4 +11,5 @@ INSTALLED_APPS = [
     'user_streams',
     'user_streams.backends.single_table',
     'user_streams.backends.many_to_many',
+    'user_streams.backends.redis',
 ]
