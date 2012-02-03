@@ -176,9 +176,7 @@ push to a feature branch, and open a pull request.
 
 ### How to run the tests
 
-Rediset is tested with [nose](http://nose.readthedocs.org). Clone the repository,
-create a virtualenv, then run `pip install -r requirements.txt`. Then, simply type
-`nosetests` to find and run all the tests.
+FIXME
 
 ## License
 
