@@ -81,6 +81,18 @@ class StreamStorageTestMixin(object):
         self.assertEqual(stream_items[1].content, 'Message 2')
         self.assertEqual(stream_items[2].content, 'Message 1')
 
+    def test_identical_messages(self):
+        """Check that identical messages are handled properly. Mostly
+        an issue for the Redis backend (which uses sets to store messages)"""
+        user = User.objects.create()
+        message = 'Test message'
+
+        add_stream_item(user, message)
+        add_stream_item(user, message)
+
+        items = get_stream_items(user)
+        self.assertEqual(len(items), 2)
+
 
 @override_settings(**DUMMY_BACKEND_SETTINGS)
 class DummyBackendStreamTestCase(TestCase, StreamStorageTestMixin):

@@ -6,6 +6,7 @@ except ImportError:
 
 from datetime import datetime
 import time
+from uuid import uuid4
 
 
 KEY_PREFIX_SETTING_NAME = 'USER_STREAMS_REDIS_KEY_PREFIX'
@@ -25,12 +26,25 @@ def create_key(key):
     return "%s:%s" % (prefix, key)
 
 
+def add_header(content):
+    """
+    We need to add a unique header to each message, as duplicate items
+    will otherwise be overwritten
+    """
+    return uuid4().hex + content
+
+
+def remove_header(content):
+    return content[32:]
+
+
 class RedisBackend(object):
 
     def __init__(self):
         self.redis_client = get_redis_client()
 
     def add_stream_item(self, users, content, created_at):
+        content = add_header(content)
         for user in users:
             key = create_key('user:%s' % user.pk)
             timestamp = time.mktime(created_at.timetuple())
@@ -60,6 +74,7 @@ class LazyResultSet(object):
         result = self.redis_client.zrange(self.key, start, stop, desc=True, withscores=True)
         for content, timestamp in result:
             created_at = datetime.fromtimestamp(timestamp)
+            content = remove_header(content)
             return StreamItem(content, created_at)
 
 
