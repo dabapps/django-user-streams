@@ -131,6 +131,9 @@ iterable returned by `get_stream_items` uses `ZREVRANGE` to retrieve each slice 
 feed, and `ZCARD` to get the complete size of the set of items. This backend
 should be screamingly fast.
 
+*Note: the Redis backend requires the `redis-py` library. Install with `pip
+install redis`.
+
 #### Writing your own backend
 
 You can create your own backend to store messages in whatever data store suits
