@@ -236,7 +236,12 @@ push to a feature branch, and open a pull request.
 
 ### How to run the tests
 
-FIXME
+Clone the repo, install the requirements into your virtualenv, then type
+`python manage.py test user_streams`. You can also use
+`python manage.py test user_streams single_table many_to_many redis` to
+run the tests for all the backends. Any of the above should also work if
+you've installed `django-user-streams` into an existing Django project (of
+course, only run the tests for the backend you're using).
 
 ## License
 
