@@ -10,4 +10,5 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'user_stream',
     'user_stream.backends.single_table',
+    'user_stream.backends.many_to_many',
 ]
