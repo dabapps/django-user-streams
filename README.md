@@ -6,6 +6,10 @@
 
 ## Changelog
 
+#### 0.3.0
+
+* Fix slicing behaviour in Redis backend
+
 #### 0.2.0
 
 * Fix packaging
