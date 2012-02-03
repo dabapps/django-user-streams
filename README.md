@@ -27,9 +27,9 @@ If you need links to other objects, just insert an `<a>` tag.
 
 ## Installation
 
-You can install django-user-stream from PyPI:
+You can install django-user-streams from PyPI:
 
-    pip install django-user-stream
+    pip install django-user-streams
 
 Add `user_streams` to your `INSTALLED_APPS` setting. You also need a *backend*,
 which defines how your streams are stored. These are described below.
