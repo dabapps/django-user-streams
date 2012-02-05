@@ -58,34 +58,61 @@ class RedisBackend(object):
 class LazyResultSet(object):
 
     def __init__(self, user):
-        self.key = create_key('user:%s' % user.pk)
-        self.redis_client = get_redis_client()
+        self.user = user
+        self.start = 0
+        self.stop = -1
+        self._results = None
+
+    @property
+    def key(self):
+        return create_key('user:%s' % self.user.pk)
+
+    def clone(self):
+        cloned = LazyResultSet(self.user)
+        cloned.start = self.start
+        cloned.stop = self.stop
+        return cloned
+
+    def load_results(self):
+        client = get_redis_client()
+        self._results = client.zrange(
+            self.key,
+            self.start,
+            self.stop,
+            desc=True,
+            withscores=True
+        )
+
+    def get_results(self):
+        if self._results is None:
+            self.load_results()
+        return self._results
 
     def __len__(self):
-        return self.redis_client.zcard(self.key)
+        if self._results is not None:
+            return len(self._results)
+
+        if self.start == 0 and self.stop == -1:
+            client = get_redis_client()
+            return client.zcard(self.key)
+
+        results = self.get_results()
+        return len(results)
+
+    def create_item(self, result):
+        content, timestamp = result
+        content = remove_header(content)
+        created_at = datetime.fromtimestamp(timestamp)
+        return StreamItem(content, created_at)
 
     def __getitem__(self, item):
-        multi = isinstance(item, slice)
-
-        if multi:
-            start = item.start or 0
-            stop = item.stop - 1
+        if isinstance(item, slice):
+            clone = self.clone()
+            clone.start = item.start or 0
+            clone.stop = item.stop - 1
+            return clone
         else:
-            start = item
-            stop = item
-
-        result = self.redis_client.zrange(self.key, start, stop, desc=True, withscores=True)
-
-        stream_items = []
-        for content, timestamp in result:
-            created_at = datetime.fromtimestamp(timestamp)
-            content = remove_header(content)
-            stream_items.append(StreamItem(content, created_at))
-
-        if multi:
-            return stream_items
-        else:
-            return stream_items[0]
+            return self.create_item(self.get_results()[item])
 
 
 class StreamItem(object):
