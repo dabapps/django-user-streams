@@ -109,7 +109,8 @@ class LazyResultSet(object):
         if isinstance(item, slice):
             clone = self.clone()
             clone.start = item.start or 0
-            clone.stop = item.stop - 1
+            clone.stop = item.stop or  0
+            clone.stop -= 1
             return clone
         else:
             return self.create_item(self.get_results()[item])

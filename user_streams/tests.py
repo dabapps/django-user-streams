@@ -95,7 +95,7 @@ class StreamStorageTestMixin(object):
 
         stream_items = get_stream_items(user)
 
-        first_five = stream_items[0:5]
+        first_five = stream_items[:5]
         self.assertEqual(len(first_five), 5)
         self.assertEqual(first_five[0].content, 'Message 9')
         self.assertEqual(first_five[4].content, 'Message 5')
@@ -104,6 +104,11 @@ class StreamStorageTestMixin(object):
         self.assertEqual(len(middle), 4)
         self.assertEqual(middle[0].content, 'Message 6')
         self.assertEqual(middle[3].content, 'Message 3')
+
+        end = stream_items[6:]
+        self.assertEqual(len(end), 4)
+        self.assertEqual(end[0].content, 'Message 3')
+        self.assertEqual(end[3].content, 'Message 0')
 
     def test_pagination(self):
         user = User.objects.create()
