@@ -6,6 +6,11 @@
 
 ## Changelog
 
+#### 0.4.0
+
+* Add tests for pagination of results
+* Fix result loading in RedisBackend
+
 #### 0.3.0
 
 * Fix slicing behaviour in Redis backend
