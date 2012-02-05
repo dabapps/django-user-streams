@@ -4,6 +4,7 @@
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
+from django.core.paginator import Paginator
 
 
 from user_streams import BACKEND_SETTING_NAME, get_backend, add_stream_item, get_stream_items
@@ -103,6 +104,31 @@ class StreamStorageTestMixin(object):
         self.assertEqual(len(middle), 4)
         self.assertEqual(middle[0].content, 'Message 6')
         self.assertEqual(middle[3].content, 'Message 3')
+
+    def test_pagination(self):
+        user = User.objects.create()
+        now = datetime.now()
+
+        for count in range(100):
+            created_at = now + timedelta(minutes=count)
+            add_stream_item(user, 'Message %s' % count, created_at=created_at)
+
+        paginator = Paginator(get_stream_items(user), 10)
+        self.assertEqual(paginator.num_pages, 10)
+
+        page_1 = paginator.page(1)
+        objects = page_1.object_list
+        self.assertEqual(len(objects), 10)
+        self.assertEqual(objects[0].content, 'Message 99')
+        self.assertEqual(objects[9].content, 'Message 90')
+        self.assertEqual(page_1.next_page_number(), 2)
+
+        page_10 = paginator.page(10)
+        objects = page_10.object_list
+        self.assertEqual(len(objects), 10)
+        self.assertEqual(objects[0].content, 'Message 9')
+        self.assertEqual(objects[9].content, 'Message 0')
+        self.assertFalse(page_10.has_next())
 
     def test_identical_messages(self):
         """Check that identical messages are handled properly. Mostly
