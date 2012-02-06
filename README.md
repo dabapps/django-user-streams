@@ -188,7 +188,7 @@ feed, and `ZCARD` to get the complete size of the set of items. This backend
 should be screamingly fast.
 
 *Note: the Redis backend requires the `redis-py` library. Install with `pip
-install redis`.
+install redis`.*
 
 ##### Redis backend settings
 
