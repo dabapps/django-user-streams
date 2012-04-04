@@ -47,11 +47,11 @@ which defines how your streams are stored. These are described below.
 INSTALLED_APPS = [
     ...
     'user_streams',
-    'user_streams.backends.single_table',
+    'user_streams.backends.user_streams_single_table_backend',
     ...
 ]
 
-USER_STREAMS_BACKEND = 'user_streams.backends.single_table.SingleTableDatabaseBackend'
+USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
 ```
 
 Finally, if you're using a backend that stores stream items using Django's model
@@ -156,7 +156,7 @@ your expected usage patterns. The pros and cons of each are described below.
 
 #### SingleTableDatabaseBackend
 
-`user_streams.backends.single_table.SingleTableDatabaseBackend`
+`user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend`
 
 The simplest backend. Your stream items are stored in a single database table,
 consisting of a foreign key to a `User` object, a `DateTimeField` timestamp, and
@@ -168,7 +168,7 @@ users, you may find that the table gets very large.
 
 #### ManyToManyDatabaseBackend
 
-`user_streams.backends.many_to_many.ManyToManyDatabaseBackend`
+`user_streams.backends.user_streams_many_to_many_backend.ManyToManyDatabaseBackend`
 
 This backend stores your messages in a table with a `ManyToManyField`
 relationship to your `User` objects. Each message is only stored *once*, with a
@@ -177,7 +177,7 @@ space for broadcast messages, but your queries may be slightly slower.
 
 #### RedisBackend
 
-`user_streams.backends.redis.RedisBackend`
+`user_streams.backends.user_streams_redis_backend.RedisBackend`
 
 Stores your messages in Redis sorted sets, one set for each user,  with a Unix
 timestamp (the `created_at` attribute) as the score for each item. This approach
@@ -251,7 +251,7 @@ push to a feature branch, and open a pull request.
 
 Clone the repo, install the requirements into your virtualenv, then type
 `python manage.py test user_streams`. You can also use
-`python manage.py test user_streams single_table many_to_many redis` to
+`python manage.py test user_streams user_streams_single_table_backend user_streams_many_to_many_backend user_streams_redis_backend` to
 run the tests for all the backends. Any of the above should also work if
 you've installed `django-user-streams` into an existing Django project (of
 course, only run the tests for the backend you're using).

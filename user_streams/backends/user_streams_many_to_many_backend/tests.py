@@ -3,9 +3,9 @@ from user_streams.tests import StreamStorageTestMixin
 from user_streams.utils import TestCase, override_settings
 
 
-BACKEND_SETTINGS = {BACKEND_SETTING_NAME: 'user_streams.backends.single_table.SingleTableDatabaseBackend'}
+BACKEND_SETTINGS = {BACKEND_SETTING_NAME: 'user_streams.backends.user_streams_many_to_many_backend.ManyToManyDatabaseBackend'}
 
 
 @override_settings(**BACKEND_SETTINGS)
-class SingleTableDatabaseBackendTestCase(TestCase, StreamStorageTestMixin):
+class ManyToManyDatabaseBackendTestCase(TestCase, StreamStorageTestMixin):
     pass

@@ -10,7 +10,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'user_streams',
-    'user_streams.backends.single_table',
-    'user_streams.backends.many_to_many',
-    'user_streams.backends.redis',
+    'user_streams.backends.user_streams_single_table_backend',
+    'user_streams.backends.user_streams_many_to_many_backend',
+    'user_streams.backends.user_streams_redis_backend',
 ]

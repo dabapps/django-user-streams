@@ -7,7 +7,7 @@ from . import Redis, KEY_PREFIX_SETTING_NAME
 
 KEY_PREFIX = 'redis_backend_tests'
 BACKEND_SETTINGS = {
-    BACKEND_SETTING_NAME: 'user_streams.backends.redis.RedisBackend',
+    BACKEND_SETTING_NAME: 'user_streams.backends.user_streams_redis_backend.RedisBackend',
     KEY_PREFIX_SETTING_NAME: KEY_PREFIX,
 }
 
