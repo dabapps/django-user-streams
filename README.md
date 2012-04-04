@@ -9,7 +9,7 @@
 #### 0.5.0
 
 * Backends renamed to make app_labels less generic (for example, `many_to_many`
-  is now `user_streams_many_to_many_backend`.
+  is now `user_streams_many_to_many_backend`).
 
 #### 0.4.0
 
