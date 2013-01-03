@@ -14,3 +14,5 @@ INSTALLED_APPS = [
     'user_streams.backends.user_streams_many_to_many_backend',
     'user_streams.backends.user_streams_redis_backend',
 ]
+
+SECRET_KEY = 'foobar'
