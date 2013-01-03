@@ -296,5 +296,5 @@ The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of DabApps.
 
-[build-status-image]: https://secure.travis-ci.org/tomchristie/django-rest-framework.png?branch=master
-[travis]: http://travis-ci.org/tomchristie/django-rest-framework?branch=master
+[build-status-image]: https://secure.travis-ci.org/dabapps/django-user-streams.png?branch=master
+[travis]: http://travis-ci.org/dabapps/django-user-streams?branch=master
