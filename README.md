@@ -73,7 +73,7 @@ You can also specify the creation time for the stream item by passing a
 
 #### A note on time zones
 
-When a stream item is created, the value of the [`USE_TZ` setting][use_tz] will be respected.
+When a stream item is created, Django's [timezone support settings][use_tz] will be respected.
 
 If timezone support is enabled by setting `USE_TZ` to `True`, then timezone-aware datestamps will be used, and stream items will be stored in the database using a UTC offset.  You will need to convert the timestamps to your users' local time at the last possible moment (when the `datetime` object is formatted for presentation to the user).
 
