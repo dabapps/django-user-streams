@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 from django.core.paginator import Paginator
@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 
 from user_streams import BACKEND_SETTING_NAME, get_backend, add_stream_item, get_stream_items
 from user_streams.backends.dummy import DummyBackend
+from user_streams.compat import datetime_now
 from user_streams.utils import TestCase, override_settings
 
 
@@ -73,7 +74,7 @@ class StreamStorageTestMixin(object):
 
     def test_message_ordering(self):
         user = User.objects.create()
-        now = datetime.now()
+        now = datetime_now()
 
         add_stream_item(user, 'Message 1', created_at=now)
         add_stream_item(user, 'Message 2', created_at=now + timedelta(minutes=1))
@@ -87,7 +88,7 @@ class StreamStorageTestMixin(object):
 
     def test_slicing(self):
         user = User.objects.create()
-        now = datetime.now()
+        now = datetime_now()
 
         for count in range(10):
             created_at = now + timedelta(minutes=count)
@@ -112,7 +113,7 @@ class StreamStorageTestMixin(object):
 
     def test_pagination(self):
         user = User.objects.create()
-        now = datetime.now()
+        now = datetime_now()
 
         for count in range(100):
             created_at = now + timedelta(minutes=count)

@@ -30,16 +30,14 @@ You can install django-user-streams from PyPI:
 Add `user_streams` to your `INSTALLED_APPS` setting. You also need a *backend*,
 which defines how your streams are stored. These are described below.
 
-```python
-INSTALLED_APPS = [
-    ...
-    'user_streams',
-    'user_streams.backends.user_streams_single_table_backend',
-    ...
-]
+    INSTALLED_APPS = [
+        ...
+        'user_streams',
+        'user_streams.backends.user_streams_single_table_backend',
+        ...
+    ]
 
-USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
-```
+    USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
 
 Finally, if you're using a backend that stores stream items using Django's model
 layer, run `manage.py syncdb` to create the necessary database tables.
@@ -50,35 +48,40 @@ layer, run `manage.py syncdb` to create the necessary database tables.
 
 To create a stream item:
 
-```python
-import user_streams
+    import user_streams
 
-user = User.objects.get(username='jamie')
-user_streams.add_stream_item(user, 'This is the contents of the stream item')
-```
+    user = User.objects.get(username='jamie')
+    user_streams.add_stream_item(user, 'This is the contents of the stream item')
 
 The first argument to `add_stream_item` can be a single `User` instance, or a queryset
 representing multiple users. In the latter case, the message you supply is added
 to the stream of each user in the queryset.
 
-```python
-import user_streams
+    import user_streams
 
-user_streams.add_stream_item(User.objects.all(), 'Broadcast message to all users')
-```
+    user_streams.add_stream_item(User.objects.all(), 'Broadcast message to all users')
 
 You can also specify the creation time for the stream item by passing a
 `datetime.datetime` instance as the value of the `created_at` argument.
 
-```python
-import user_streams
-from datetime import datetime
+    python
+    import user_streams
+    from datetime import datetime
 
-user = User.objects.get(username='jamie')
-user_streams.add_stream_item(user, 'You have a new message!', created_at=datetime.now())
-```
+    user = User.objects.get(username='jamie')
+    user_streams.add_stream_item(user, 'You have a new message!', created_at=datetime.now())
 
 #### A note on time zones
+
+When a stream item is created, the value of the [`USE_TZ` setting][use_tz] will be respected.
+
+If timezone support is enabled by setting `USE_TZ` to `True`, then timezone-aware datestamps will be used, and stream items will be stored in the database using a UTC offset.  You will need to convert the timestamps to your users' local time at the last possible moment (when the `datetime` object is formatted for presentation to the user).
+
+If timezone support is disabled by setting `USE_TZ` to `False`, then timezone-naive datestamps will be used, and stream items should be dealt with as using localtime.
+
+#### Time zones and Django 1.3 compatibility
+
+Django's timezone support was added in 1.4, so things work a little differently if you're using `django-user-streams` with Django 1.3.
 
 By default, if you don't pass a `created_at` argument to `add_stream_item`, the
 value of `datetime.datetime.now()` will be used to timestamp your stream items.
@@ -96,9 +99,8 @@ You can then convert them to your users' local time at the last possible moment
 To support this, you can either provide the `created_at` argument every time
 you call the `add_stream_item` method:
 
-```python
-user_streams.add_stream_item(user, 'You have a new message!', created_at=datetime.utcnow())
-```
+    user_streams.add_stream_item(user, 'You have a new message!',
+                                 created_at=datetime.utcnow())
 
 Alternatively, you can set the `USER_STREAMS_USE_UTC` setting (in your
 `settings.py`) to `True` (it's `False` by default). If you do this,
@@ -110,16 +112,16 @@ stream items will be set to UTC time. It's your responsibility to convert
 this to each user's local time for formatting. Take a look at
 [times](https://github.com/nvie/times) for an easy way to deal with that.
 
+Support for Django 1.3 and the `USER_STREAMS_USE_UTC` setting is intended to be deperecated at some point in the future.
+
 ### Getting the stream for a user
 
 To retrieve the stream items for a user:
 
-```python
-import user_streams
+    import user_streams
 
-user = User.objects.get(username='jamie')
-items = user_streams.get_stream_items(user)
-```
+    user = User.objects.get(username='jamie')
+    items = user_streams.get_stream_items(user)
 
 This will return an iterable of objects, each of which is guaranteed to have two
 properties: `created_at`, which will be a `datetime.datetime` instance
@@ -298,3 +300,4 @@ either expressed or implied, of DabApps.
 
 [build-status-image]: https://secure.travis-ci.org/dabapps/django-user-streams.png?branch=master
 [travis]: http://travis-ci.org/dabapps/django-user-streams?branch=master
+[use_tz]: https://docs.djangoproject.com/en/1.4/topics/i18n/timezones/
