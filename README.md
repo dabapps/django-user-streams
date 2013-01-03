@@ -4,29 +4,11 @@
 
 **Author:** Jamie Matthews. [Follow me on Twitter](http://twitter.com/j4mie).
 
-## Changelog
+[![build-status-image]][travis]
 
-#### 0.5.0
+## Requirements
 
-* Backends renamed to make app_labels less generic (for example, `many_to_many`
-  is now `user_streams_many_to_many_backend`).
-
-#### 0.4.0
-
-* Add tests for pagination of results
-* Fix result loading in RedisBackend
-
-#### 0.3.0
-
-* Fix slicing behaviour in Redis backend
-
-#### 0.2.0
-
-* Fix packaging
-
-#### 0.1.0
-
-* Initial release.
+* Django 1.3, 1.4, 1.5
 
 ## Overview
 
@@ -261,6 +243,30 @@ run the tests for all the backends. Any of the above should also work if
 you've installed `django-user-streams` into an existing Django project (of
 course, only run the tests for the backend you're using).
 
+## Changelog
+
+#### 0.5.0
+
+* Backends renamed to make app_labels less generic (for example, `many_to_many`
+  is now `user_streams_many_to_many_backend`).
+
+#### 0.4.0
+
+* Add tests for pagination of results
+* Fix result loading in RedisBackend
+
+#### 0.3.0
+
+* Fix slicing behaviour in Redis backend
+
+#### 0.2.0
+
+* Fix packaging
+
+#### 0.1.0
+
+* Initial release.
+
 ## License
 
 Copyright (c) DabApps
@@ -289,3 +295,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of DabApps.
+
+[build-status-image]: https://secure.travis-ci.org/tomchristie/django-rest-framework.png?branch=master
+[travis]: http://travis-ci.org/tomchristie/django-rest-framework?branch=master
