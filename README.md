@@ -247,6 +247,10 @@ course, only run the tests for the backend you're using).
 
 ## Changelog
 
+#### 0.6.0
+
+* Add compatibility with Django 1.4's support for timezones
+
 #### 0.5.0
 
 * Backends renamed to make app_labels less generic (for example, `many_to_many`
