@@ -2,7 +2,7 @@ from django.db import models
 from user_streams.backends.utils import get_user_model_fk_ref
 
 
-class StreamItem(models.Model):
+class MultiUserStreamItem(models.Model):
 
     users = models.ManyToManyField(get_user_model_fk_ref(), related_name='+')
     content = models.TextField()
