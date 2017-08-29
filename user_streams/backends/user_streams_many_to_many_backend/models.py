@@ -10,3 +10,4 @@ class StreamItem(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        db_table = 'user_streams_many_to_many_backend_streamitem'
