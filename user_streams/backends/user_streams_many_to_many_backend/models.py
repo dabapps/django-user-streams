@@ -1,9 +1,10 @@
+from django.conf import settings
 from django.db import models
 
 
 class StreamItem(models.Model):
 
-    users = models.ManyToManyField('auth.User', related_name='+')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='+')
     content = models.TextField()
     created_at = models.DateTimeField()
 
