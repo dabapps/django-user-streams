@@ -1,9 +1,10 @@
 from django.db import models
+from user_streams.backends.utils import get_user_model_fk_ref
 
 
 class StreamItem(models.Model):
 
-    user = models.ForeignKey('auth.User', related_name='+')
+    user = models.ForeignKey(get_user_model_fk_ref(), related_name='+')
     content = models.TextField()
     created_at = models.DateTimeField()
 

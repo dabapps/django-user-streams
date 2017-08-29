@@ -1,10 +1,10 @@
-from django.conf import settings
 from django.db import models
+from user_streams.backends.utils import get_user_model_fk_ref
 
 
 class StreamItem(models.Model):
 
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='+')
+    users = models.ManyToManyField(get_user_model_fk_ref(), related_name='+')
     content = models.TextField()
     created_at = models.DateTimeField()
 
