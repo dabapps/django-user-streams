@@ -12,5 +12,8 @@ install:
   - pip install redis
   - export PYTHONPATH=.
 
+services:
+  - redis-server
+
 script:
   - python manage.py test user_streams
