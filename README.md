@@ -21,6 +21,9 @@ additional metadata about the stream items, such as generic foreign keys to and
 `Actor` or a `Target`. You just store the item content as plain text (or HTML).
 If you need links to other objects, just insert an `<a>` tag.
 
+## DEPRECATED
+**PLEASE NOTE:** _This repository is no longer actively maintained or regularly used by DabApps and therefore should be considered deprecated. Please find alternative packages for your needs or feel free to create and maintain your own fork._
+
 ## Installation
 
 You can install django-user-streams from PyPI:
